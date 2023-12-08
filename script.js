@@ -63,6 +63,10 @@ const Game = (() => {
         const clickedSquare = event.target;
         const array = Gameboard.getGameboardArray;
 
+        if(gameOver) {
+            return;
+        }
+
         if (clickedSquare.classList.contains('square')) {
             let idArray = clickedSquare.id.split('-');
             let clickedSquareId = parseInt(idArray[1]);
