@@ -36,6 +36,7 @@ const createPlayer = (sign) => {
 };
 
 const Game = (() => {
+    const restartButton = document.querySelector('.restart');
     let players = [];
     let playerDiv = document.querySelector('.player');
     let currentPlayerIndex;
@@ -54,12 +55,13 @@ const Game = (() => {
 
         const gameboardElement = Gameboard.getGameboardElement;
         gameboardElement.addEventListener('click', handleClick);
+
+        restartButton.addEventListener('click', restart);
     };
 
     const handleClick = (event) => {
         const clickedSquare = event.target;
         const array = Gameboard.getGameboardArray;
-
 
         if (clickedSquare.classList.contains('square')) {
             let idArray = clickedSquare.id.split('-');
@@ -72,14 +74,55 @@ const Game = (() => {
             }
 
             Gameboard.update(clickedSquareId, players[currentPlayerIndex].sign);
+
+            if(checkWin(array, players[currentPlayerIndex].sign)) {
+                gameOver = true;
+                alert(`${players[currentPlayerIndex].sign} won`);
+            }
+
             nextTurn();
+
         }
     };
+
+    function checkWin(gameboardArray) {
+        const winningCombinations = [
+            // Rows
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+
+            // Columns
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+
+            // Diagonals
+            [0, 4, 8],
+            [2, 4, 6]
+        ]
+
+        for(let i = 0; i < winningCombinations.length; i++) {
+            const [a, b, c] = winningCombinations[i]; // destructuring
+            if(gameboardArray[a] !== '' && gameboardArray[a] === gameboardArray[b] && gameboardArray[a] === gameboardArray[c]) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     const nextTurn = () => {
         currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
         let currentPlayer = currentPlayerIndex === 0 ? 'X' : 'O';
         playerDiv.textContent = `Player ${currentPlayer}'s turn`;
+    }
+
+    const restart = () => {
+        for(let i = 0; i < 9; i++) {
+            Gameboard.update(i, "");
+        }
+        Gameboard.render();
+        start();
     }
 
     return {
