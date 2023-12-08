@@ -78,6 +78,8 @@ const Game = (() => {
             if(checkWin(array, players[currentPlayerIndex].sign)) {
                 gameOver = true;
                 alert(`${players[currentPlayerIndex].sign} won`);
+            } else if(checkDraw(array)) {
+                alert("Draw");
             }
 
             nextTurn();
@@ -109,6 +111,10 @@ const Game = (() => {
             }
         }
         return false;
+    }
+
+    function checkDraw(gameboardArray) {
+        return allSquaresFilled = gameboardArray.every(square => square !== '');
     }
 
     const nextTurn = () => {
