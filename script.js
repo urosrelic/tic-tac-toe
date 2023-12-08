@@ -19,10 +19,13 @@ const Gameboard = (() => {
     // Property to access the gameboard element
     const getGameboardElement = gameboard;
 
+    const getGameboardArray = gameboardArray;
+
     return {
         render,
         update,
-        getGameboardElement
+        getGameboardElement,
+        getGameboardArray
     };
 })();
 
@@ -55,11 +58,18 @@ const Game = (() => {
 
     const handleClick = (event) => {
         const clickedSquare = event.target;
+        const array = Gameboard.getGameboardArray;
+
 
         if (clickedSquare.classList.contains('square')) {
             let idArray = clickedSquare.id.split('-');
             let clickedSquareId = parseInt(idArray[1]);
             console.log(clickedSquareId);
+
+            
+            if(array[clickedSquareId] !== "") {
+                return;
+            }
 
             Gameboard.update(clickedSquareId, players[currentPlayerIndex].sign);
             nextTurn();
